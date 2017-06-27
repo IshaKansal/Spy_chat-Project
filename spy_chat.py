@@ -116,7 +116,7 @@ def read_message():
     # decoding the image and storing the text
     text = Steganography.decode(output_path)
     # testing whether there is message in image or not
-    if len(text) > 0:
+    if len(text.split()) > 0  :
         # Checking the no of words in a message if more than 100 remove that friend
         if len(text.split()) > 100:
             print colored("You are spamming the chat..that' s why u  are removed from spy's friend list", 'red')
@@ -165,30 +165,39 @@ def add_friend():
     # Checking the validity of name by calling 'valid_name' and passing the name as argument
     if valid_name(new_friend.name):
         # If name is valid...input salutation for friend
-        new_friend.name = raw_input("Are they (Mr./Ms./Dr.)?") + new_friend.name
-        # Welcome message for friend
-        print colored("Welcome %s" % new_friend.name, 'blue')
-        # Input friends age
-        new_friend.age = int(raw_input("Enter friend's age?"))
-        # Checking eligibility of  friend to be a spy or not
-        if valid_age(new_friend.age):
-            print colored("%s is eligible to be a spy" % new_friend.name, 'blue')
-            # If eligible...enter friend's rating
-            new_friend.rating = float(raw_input("Enter friend's rating?"))
-            # Friend's rating should be greater than spy's rating
-            if new_friend.rating >= spy.rating:
-                print colored("You are eligible to be spy's friend", 'blue')
-                # Input friend online status
-                new_friend.is_Online = raw_input("Is Your Friend Online(True/False)")
-                # Appending new friend in 'friends' list
-                friends.append(new_friend)
-                print colored("Your friend is added to ur list", 'blue')
+        salutation = raw_input("Are they (Mr./Ms./Dr.)?")
+        # List containing salutations
+        salutation_list = ["Dr.", "Mr.", "Ms."]
+        # If salutation is correct...proceed...."capitalize() will make the first letter of word capital"
+        if salutation.capitalize() in salutation_list:
+            # Updating friends name..adding salutation
+            new_friend.name = salutation + new_friend.name
+            # Welcome message for friend
+            print colored("Welcome %s" % new_friend.name, 'blue')
+            # Input friends age
+            new_friend.age = int(raw_input("Enter friend's age?"))
+            # Checking eligibility of  friend to be a spy or not
+            if valid_age(new_friend.age):
+                print colored("%s is eligible to be a spy" % new_friend.name, 'blue')
+                # If eligible...enter friend's rating
+                new_friend.rating = float(raw_input("Enter friend's rating?"))
+                # Friend's rating should be greater than spy's rating
+                if new_friend.rating >= spy.rating:
+                    print colored("You are eligible to be spy's friend", 'blue')
+                    # Input friend online status
+                    new_friend.is_Online = raw_input("Is Your Friend Online(True/False)")
+                    # Appending new friend in 'friends' list
+                    friends.append(new_friend)
+                    print colored("Your friend is added to ur list", 'blue')
+                else:
+                    # If rating is less......friend can't be added in list
+                    print colored("Your rating is not up to criteria", 'red')
             else:
-                # If rating is less......friend can't be added in list
-                print colored("Your rating is not up to criteria", 'red')
+                # If age is not meeting the criteria....friend can't be a spy
+                print colored("Your friend %s is not eligible to be a spy" % new_friend.name, 'red')
         else:
-            # If age is not meeting the criteria....friend can't be a spy
-            print colored("Your friend %s is not eligible to be a spy" % new_friend.name, 'red')
+            # Enter wrong salutation
+            print colored("Enter wrong salutation", 'red')
     else:
         # If name is not valid
         print colored("Your friend name is invalid", 'red')
@@ -289,41 +298,54 @@ def details():
     # Checking the correctness of name
     if valid_name(spy.name):
         # # If name is correct....ask the spy about salutation
-        spy.name = raw_input("What should we call u?(Mr./Ms./Dr.)") + spy.name
-        # Print welcome message for spy
-        print colored("Hello! %s" % spy.name, 'blue')
-        # Input spy's age
-        spy.age = int(raw_input("What is ur age?"))
-        # Validating spy's age to be spy or not
-        if valid_age(spy.age):
-            #  If valid  input spy's rating
-            print colored("You are eligible to be a spy", 'blue')
-            spy.rating = float(raw_input("What is ur rating?"))
-            # Informing the spy about category on the basis of rating
-            rating_criteria(spy.rating)
-            # setting spy's online status
-            spy.is_online = True
-            # After all checks print message with all details of spy
-            print colored("Authentication complete...Spy Name=%s, Spy Age=%d, Spy Rating=%.2f, Spy Status=%s"
-                          % (spy.name.title(), spy.age, spy.rating, spy.is_online), 'blue')
-            # calling start_chat() function to start  the chat
-            start_chat(spy)
+        salutation = raw_input("What should we call u?(Mr./Ms./Dr.)")
+        # List containing salutations
+        salutation_list = ["Dr.", "Mr.", "Ms."]
+        # If salutation is correct...proceed...."capitalize() will make the first letter of word capital"
+        if salutation.capitalize() in salutation_list:
+            # Updating spy name..adding salutation
+            spy.name = salutation + spy.name
+            # Print welcome message for spy
+            print colored("Hello! %s" % spy.name, 'blue')
+            # Input spy's age
+            spy.age = int(raw_input("What is ur age?"))
+            # Validating spy's age to be spy or not
+            if valid_age(spy.age):
+                #  If valid  input spy's rating
+                print colored("You are eligible to be a spy", 'blue')
+                spy.rating = float(raw_input("What is ur rating?"))
+                # Informing the spy about category on the basis of rating
+                rating_criteria(spy.rating)
+                # setting spy's online status
+                spy.is_online = True
+                # After all checks print message with all details of spy
+                print colored("Authentication complete...Spy Name=%s, Spy Age=%d, Spy Rating=%.2f, Spy Status=%s"
+                              % (spy.name.title(), spy.age, spy.rating, spy.is_online), 'blue')
+                # calling start_chat() function to start  the chat
+                start_chat(spy)
+            else:
+                # If spy's age is not according to criteria
+                print colored("You are not eligible", 'red')
         else:
-            # If spy's age is not according to criteria
-            print colored("You are not eligible", 'red')
+            # If spy enter wrong salutation
+            print colored("Enter wrong salutation", 'red')
     else:
         # If spy enter invalid name
         print colored("Invalid Name", 'red')
 
-# give our user the option to continue with default user  or define a new user
-question = raw_input("continue as  %s (Y/N)" % spy.name)
-# checking the input
-if question.upper() == "Y":
-    # if user continues with same details calling start_chat() function to start the chat
-    start_chat(spy)
-elif question.upper() == "N":
-    # if not continues with same details calling details() function to add new details
-    details()
-# If Spy enter other than "y/n"
-else:
-    print colored("You entered a wrong choice!!!", 'red')
+s = True
+while s:
+    # give our user the option to continue with default user  or define a new user
+    question = raw_input("continue as  %s (Y/N)" % spy.name)
+    # checking the input
+    if question.upper() == "Y":
+        s = False
+        # if user continues with same details calling start_chat() function to start the chat
+        start_chat(spy)
+    elif question.upper() == "N":
+        s = False
+        # if not continues with same details calling details() function to add new details
+        details()
+    # If Spy enter other than "y/n"
+    else:
+        print colored("You entered a wrong choice!!! Please enter y or n", 'red')
