@@ -41,8 +41,8 @@ def valid_name(spy_name):
     # iv for digits,space and special symbols
     iv = 0
     # checking the input from user after splitting it
-    for s in spy_name1:
-        if s.isalpha():
+    for k in spy_name1:
+        if k.isalpha():
             # if only character...increment "v"
             v += 1
         else:
@@ -116,7 +116,7 @@ def read_message():
     # decoding the image and storing the text
     text = Steganography.decode(output_path)
     # testing whether there is message in image or not
-    if len(text.split()) > 0  :
+    if len(text.split()) > 0:
         # Checking the no of words in a message if more than 100 remove that friend
         if len(text.split()) > 100:
             print colored("You are spamming the chat..that' s why u  are removed from spy's friend list", 'red')
@@ -197,7 +197,7 @@ def add_friend():
                 print colored("Your friend %s is not eligible to be a spy" % new_friend.name, 'red')
         else:
             # Enter wrong salutation
-            print colored("Enter wrong salutation", 'red')
+            print colored(" You enter wrong salutation", 'red')
     else:
         # If name is not valid
         print colored("Your friend name is invalid", 'red')
@@ -212,7 +212,6 @@ def add_status(current_status_message):
     else:
         # If None.....print appropriate message
         print colored("You don't have any status message currently\n", 'red')
-    new_status_message = None
     # Asking the spy whether spy will select from older status or add new status
     default = raw_input("Do you want to select from the older status(Y/N)?")
     # If not from older status then ask the spy which new status want to set
@@ -240,7 +239,7 @@ def add_status(current_status_message):
             print colored("You entered a wrong index", 'red')
     # If spy enter other than 'y or n' then show this message
     else:
-        print colored("The option you entered is not valid! please enter y or n", 'red')
+        print colored("The option you entered is not valid!", 'red')
 
 
 # defining a function for chat
@@ -261,8 +260,9 @@ def start_chat(spy):
             print colored("You choose to update", 'blue')
             # Calling 'add_status' to update status
             spy.current_status_message = add_status(spy.current_status_message)
-            # Printing the new status returned by 'add_status'
-            print colored("Your new status is %s" % spy.current_status_message, 'blue')
+            if spy.current_status_message is not None:
+                # Printing the new status returned by 'add_status'
+                print colored("Your new status is %s" % spy.current_status_message, 'blue')
         # Spy wants to enter a new friend
         elif menu_choices == 2:
             # Calling 'add_friend' to add details of friend
@@ -334,6 +334,7 @@ def details():
         print colored("Invalid Name", 'red')
 
 s = True
+# Loop will continue until user enter right choice
 while s:
     # give our user the option to continue with default user  or define a new user
     question = raw_input("continue as  %s (Y/N)" % spy.name)
